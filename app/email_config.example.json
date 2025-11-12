@@ -1,0 +1,11 @@
+{
+    "email_provider": "smtp",
+    "smtp_settings": {
+        "smtp_server": "localhost",
+        "smtp_port": 1025,
+        "smtp_use_tls": false,
+        "smtp_username": "your-protonmail-username",
+        "smtp_password": "your-protonmail-bridge-password",
+        "from_email": "your-email@protonmail.com"
+    }
+}
