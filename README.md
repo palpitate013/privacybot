@@ -133,6 +133,12 @@ Run the below commands within the activated virtual environment.
 
 The above commands will start the flask application. It can now be accessed through http://127.0.0.1:5000/
 
+**Note:** The Flask application now includes an auto-update feature that:
+- Performs a `git pull` on initial startup to ensure you have the latest code
+- Automatically checks for updates every 24 hours
+- Restarts the application when updates are found
+- All update operations are logged for your reference
+
 Leave this terminal instance as is, and open the second terminal instance. 
 
 ### Start the React Application
@@ -166,3 +172,29 @@ PFB a step by step list of commands that informs how to install an instance of t
 You will now be able to fill in the required details on the browser form that is opened by the above React commands. Once the required details are filled in and your GMAIL account is authenticated successfully, PrivacyBot will automatically send data deletion requests to the chosen list of data brokers! Yay!
 
 #### 6. Remove access to PrivacyBot from your Gmail account
+
+## Auto-Update Feature
+
+PrivacyBot now includes an automatic update mechanism to keep your installation up-to-date with the latest improvements and bug fixes.
+
+### How It Works
+
+When you start the Flask application (`flask run`), the following happens automatically:
+
+1. **Initial Update Check**: On startup, the application performs a `git pull` to check for and download any updates from the repository
+2. **Scheduled Updates**: A background thread runs that checks for updates every 24 hours
+3. **Automatic Restart**: If updates are found during any check, the application automatically restarts to apply the changes
+
+### What This Means For You
+
+- Your PrivacyBot installation will always stay current with the latest features and security fixes
+- Updates happen seamlessly in the background without manual intervention
+- The application will restart automatically when updates are applied
+- All update activity is logged so you can see when updates occur
+
+### Disabling Auto-Updates
+
+If you prefer to manage updates manually, you can disable the auto-update feature by modifying `app/app.py`:
+
+1. Open `app/app.py`
+2. Change the line `auto_updater = setup_auto_updater(check_interval_hours=24, pull_on_startup=True)` to `auto_updater = setup_auto_updater(check_interval_hours=24, pull_on_startup=False)` to disable updates on startup, or comment out the entire line to disable auto-updates completely.

@@ -6,7 +6,8 @@ Email logic in corefunctions.py
 from flask import Flask, request, Response, jsonify
 from flask_cors import CORS
 import json
-from corefunctions import csv_to_map, sendEmail, privacyAPI 
+from corefunctions import csv_to_map, sendEmail, privacyAPI
+from auto_updater import setup_auto_updater 
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/privacyAPI/*": {"origins": "http://localhost:3000"}})
@@ -34,4 +35,7 @@ def executePrivacyAPI():
 
 # Run Server
 if __name__ == '__main__':
+    # Setup auto-updater: git pull on startup and every 24 hours
+    auto_updater = setup_auto_updater(check_interval_hours=24, pull_on_startup=True)
+    
     app.run(debug=True)
