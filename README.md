@@ -7,18 +7,95 @@ PrivacyBot is a simple automated service to initiate CCPA deletion requests with
 
 ## How It Works
 1. PrivacyBot comprises of a React Frontend and a Python Flask Backend web architecture
-2. After starting the application, PrivacyBot initiates an OAuth authentication request with your Gmail account. You will be asked to allow PrivacyBot to read, compose and send emails from your Gmail account. 
-3. Once the authentication is successfully completed, depending on the data provided to the Flask API, a CCPA data delete email is drafted and sent to the data brokers chosen. 
+2. After starting the application, PrivacyBot can send emails using either:
+   - **Gmail API (OAuth)** - Original method requiring OAuth authentication with your Gmail account
+   - **SMTP** - New method supporting Proton Mail Bridge and other SMTP servers
+3. Once configured, depending on the data provided to the Flask API, a CCPA data delete email is drafted and sent to the data brokers chosen. 
 4. A confirmation email is sent back to you listing all the databrokers to whom the email was sent. 
 
 
 
 ## Prerequisites
 
-1. A Gmail account - This is the email from which you will be initiating the data delete requests. PrivacyBot's data deletion process is most effective if this email is the one which you use the most for personal use. 
+1. An email account - This is the email from which you will be initiating the data delete requests. PrivacyBot's data deletion process is most effective if this email is the one which you use the most for personal use.
+   - **Option A**: A Gmail account (for Gmail API method)
+   - **Option B**: Any email account with SMTP access (ProtonMail via Bridge, Gmail, Outlook, etc.)
 2. Install Python 3 (https://www.python.org/downloads/)
 3. Ensure pip3 is installed (https://pip.pypa.io/en/stable/installing/)
-4. Install node https://nodejs.org/en/download/ 
+4. Install node https://nodejs.org/en/download/
+
+## Email Provider Configuration
+
+PrivacyBot supports two email sending methods:
+
+### Option A: Gmail API (Original Method)
+Requires setting up Google OAuth credentials. See the original documentation below.
+
+### Option B: SMTP (Recommended for ProtonMail Bridge)
+
+#### Using Proton Mail Bridge
+
+1. **Install Proton Mail Bridge**
+   - Download from https://protonmail.com/bridge
+   - Install and log in with your ProtonMail account
+   - Start the Bridge application
+
+2. **Get SMTP Credentials from Bridge**
+   - Open Proton Mail Bridge
+   - Go to Settings → Your account
+   - Note the SMTP server details (typically `localhost` or `127.0.0.1`)
+   - Note the SMTP port (typically `1025`)
+   - Copy your Bridge username and password
+
+3. **Configure PrivacyBot for SMTP**
+   
+   Create a file `app/email_config.json` based on `app/email_config.example.json`:
+   
+   ```json
+   {
+       "email_provider": "smtp",
+       "smtp_settings": {
+           "smtp_server": "localhost",
+           "smtp_port": 1025,
+           "smtp_use_tls": false,
+           "smtp_username": "your-protonmail-username",
+           "smtp_password": "your-bridge-password",
+           "from_email": "your-email@protonmail.com"
+       }
+   }
+   ```
+   
+   **Alternatively**, you can use environment variables:
+   ```bash
+   export EMAIL_PROVIDER=smtp
+   export SMTP_SERVER=localhost
+   export SMTP_PORT=1025
+   export SMTP_USERNAME=your-protonmail-username
+   export SMTP_PASSWORD=your-bridge-password
+   export FROM_EMAIL=your-email@protonmail.com
+   export SMTP_USE_TLS=false
+   ```
+
+#### Using Other SMTP Providers
+
+For Gmail, Outlook, or other SMTP providers, adjust the settings accordingly:
+
+**Gmail SMTP Example:**
+```json
+{
+    "email_provider": "smtp",
+    "smtp_settings": {
+        "smtp_server": "smtp.gmail.com",
+        "smtp_port": 587,
+        "smtp_use_tls": true,
+        "smtp_username": "your-email@gmail.com",
+        "smtp_password": "your-app-password",
+        "from_email": "your-email@gmail.com"
+    }
+}
+```
+
+**Note**: For Gmail, you'll need to use an App Password, not your regular password.
 
 ## Usage - Running PrivacyBot
 

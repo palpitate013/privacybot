@@ -1,6 +1,7 @@
 app/__pycache__/**
 app/__pycache__/
 app/token*
+app/email_config.json
 privacybot/
 privacybot/**
 
